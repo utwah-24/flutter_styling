@@ -5,6 +5,7 @@ import 'package:flutter_styling/widgets/new_transaction.dart';
 import './widgets/transaction_list.dart';
 import './models/transaction.dart';
 import './widgets/chart.dart';
+import './widgets/Login.dart';
 
 void main() {
   // WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.purple,
           fontFamily: 'OpenSans',
           appBarTheme: AppBarTheme()),
-      home: MyHomePage(),
+      home: Login(),
     );
   }
 }
