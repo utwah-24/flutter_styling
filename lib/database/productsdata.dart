@@ -9,12 +9,12 @@ class SQLHelper {
         Product_ID INTEGER PRIMARY KEY AUTOINCREMENT,
         Product_name CHAR(20) NOT NULL,
         Product_amount CHAR(20) NOT NULL,
-        Product_price CHAR(20) NOT NULL
+        Product_price REAL NOT NULL
       )""");
   }
 
   static Future<void> insertProData(Database database, String product_name,
-      String product_amount, int product_price) async {
+      String product_amount, double product_price) async {
     await database.transaction((txn) async {
       await txn.rawInsert("""
         INSERT INTO products(product_name, product_amount, product_price)
@@ -39,24 +39,39 @@ class DatabaseHelper {
   static Future<void> insertProducts(ProductData productdata) async {
     final db = await DatabaseHelper.db();
     await SQLHelper.insertProData(db, productdata.product_name,
-        productdata.product_amount, productdata.product_price);
+        productdata.product_amount, productdata.product_price as double);
   }
 
-  static Future<List<ProductData>> getProducts(
-      String product_name, String product_amount, int product_price) async {
-    final db = await DatabaseHelper.db();
-    final List<Map<String, dynamic>> maps = await db.rawQuery(
-        'SELECT * FROM products WHERE product_name = ? AND product_amount = ? AND product_price = ?',
-        [product_name, product_amount, product_price]);
-    print("the list");
-    print(maps);
+  // static Future<List<ProductData>> getProducts(
+  //     String product_name, String product_amount, double product_price) async {
+  //   final db = await DatabaseHelper.db();
+  //   final List<Map<String, dynamic>> maps = await db.rawQuery(
+  //       'SELECT * FROM products WHERE product_name = ? AND product_amount = ? AND product_price = ?',
+  //       [product_name, product_amount, product_price]);
+  //   print("the list");
+  //   print(maps);
 
-    return List.generate(maps.length, (i) {
-      return ProductData(
-        product_name: maps[i]['Product_name'] ?? "",
-        product_amount: maps[i]['Product_amount'] ?? "",
-        product_price: maps[i]['Product_price'] ?? "",
-      );
-    });
-  }
+  //   return List.generate(maps.length, (i) {
+  //     return ProductData(
+  //       product_name: maps[i]['Product_name'] ?? "",
+  //       product_amount: maps[i]['Product_amount'] ?? "",
+  //       product_price: maps[i]['Product_price'] ?? "",
+  //     );
+  //   });
+  // }
+  static Future<List<ProductData>> getProducts() async {
+  final db = await DatabaseHelper.db();
+  final List<Map<String, dynamic>> maps = await db.query('products');
+  print("the list");
+  print(maps);
+
+  return List.generate(maps.length, (i) {
+    return ProductData(
+      product_name: maps[i]['Product_name'] ?? "",
+      product_amount: maps[i]['Product_amount'] ?? "",
+      product_price: maps[i]['Product_price'] ?? "",
+    );
+  });
+}
+
 }

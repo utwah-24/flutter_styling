@@ -25,31 +25,20 @@ class _ProductsState extends State<Products> {
   Future<void> con_pro_data() async {
     String product_name = _nameController.text;
     String product_amount = _amountController.text;
-    int product_price = int.tryParse(_priceController.text) ?? 0;
+    double product_price = double.tryParse(_priceController.text) ?? 0;
     if (product_name.isEmpty && product_amount.isEmpty && product_price == 0) {
       return; // No data to insert, return from the function
-    } // Parsing price to int
+    }
 
     try {
       await DatabaseHelper.insertProducts(ProductData(
-        product_name: product_name, // Updated field names
-        product_amount: product_amount, // Updated field names
+        product_name: product_name,
+        product_amount: product_amount,
         product_price: product_price,
       ));
 
       print("inserting data...");
-      setState(() {
-        productRows.add(
-          DataRow(cells: [
-            DataCell(Text(product_name)),
-            DataCell(Text(product_amount)),
-            DataCell(Text(product_price as String)),
-          ]),
-        );
-      });
-      setState(() {
-        _fetchProducts();
-      });
+      _fetchProducts(); // Fetch and display all data after inserting new data
 
       _nameController.clear();
       _amountController.clear();
@@ -62,14 +51,99 @@ class _ProductsState extends State<Products> {
     }
   }
 
-  Future<void> _fetchProducts() async {
-    String product_name = _nameController.text;
-    String product_amount = _amountController.text;
-    int product_price = int.tryParse(_priceController.text) ?? 0;
+//   Future<void> con_pro_data() async {
+//   String product_name = _nameController.text;
+//   String product_amount = _amountController.text;
+//   double product_price = double.tryParse(_priceController.text) ?? 0;
+//   if (product_name.isEmpty && product_amount.isEmpty && product_price == 0) {
+//     return; // No data to insert, return from the function
+//   } // Parsing price to int
 
+//   try {
+//     await DatabaseHelper.insertProducts(ProductData(
+//       product_name: product_name, // Updated field names
+//       product_amount: product_amount, // Updated field names
+//       product_price: product_price,
+//     ));
+
+//     print("inserting data...");
+//     _fetchProducts(); 
+//     List<ProductData> fetchedProducts = await DatabaseHelper.getProducts(
+//       product_name, product_amount, product_price);
+
+//     setState(() {
+//       productRows.clear(); // Clear existing rows
+//       productRows.addAll(
+//         fetchedProducts.map((product) {
+//           return DataRow(cells: [
+//             DataCell(Text(product.product_name)),
+//             DataCell(Text(product.product_amount)),
+//             DataCell(Text(product.product_price.toString())),
+//           ]);
+//         }),
+//       );
+//     });
+
+//     _nameController.clear();
+//     _amountController.clear();
+//     _priceController.clear();
+//   } catch (e) {
+//     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+//       content: Text('Failed to input data. Try again.'),
+//     ));
+//     print('Error inserting data into database: $e');
+//   }
+// }
+
+
+  // Future<void> con_pro_data() async {
+  //   String product_name = _nameController.text;
+  //   String product_amount = _amountController.text;
+  //   double product_price = double.tryParse(_priceController.text) ?? 0;
+  //   if (product_name.isEmpty && product_amount.isEmpty && product_price == 0) {
+  //     return; // No data to insert, return from the function
+  //   } // Parsing price to int
+
+  //   try {
+  //     await DatabaseHelper.insertProducts(ProductData(
+  //       product_name: product_name, // Updated field names
+  //       product_amount: product_amount, // Updated field names
+  //       product_price: product_price,
+  //     ));
+
+  //     print("inserting data...");
+  //     List<ProductData> fetchedProducts = await DatabaseHelper.getProducts(
+  //     product_name, product_amount, product_price);
+  //     setState(() {
+  //       productRows.clear();
+  //        productRows.addAll(
+  //       DatabaseHelper.getProducts.map((product) {
+  //         return DataRow(cells: [
+  //           DataCell(Text(product.product_name)),
+  //           DataCell(Text(product.product_amount)),
+  //           DataCell(Text(product.product_price.toString())),
+  //         ]);
+  //       }),
+  //     );
+  //     });
+  //     setState(() {
+  //       _fetchProducts();
+  //     });
+
+  //     _nameController.clear();
+  //     _amountController.clear();
+  //     _priceController.clear();
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //       content: Text('Failed to input data. Try again.'),
+  //     ));
+  //     print('Error inserting data into database: $e');
+  //   }
+  // }
+
+  Future<void> _fetchProducts() async {
     try {
-      List<ProductData> products = await DatabaseHelper.getProducts(
-          product_name, product_amount, product_price);
+      List<ProductData> products = await DatabaseHelper.getProducts();
       print("fetched products");
       print(products);
       setState(() {
@@ -77,17 +151,41 @@ class _ProductsState extends State<Products> {
           return DataRow(cells: [
             DataCell(Text(product.product_name)),
             DataCell(Text(product.product_amount)),
-            DataCell(Text(product.product_price as String)),
+            DataCell(Text(product.product_price.toString())),
           ]);
         }).toList();
       });
     } catch (e) {
-      print(product_name);
-      print(product_amount);
-      print(product_price);
       print('Error fetching products from database: $e');
     }
   }
+
+  // Future<void> _fetchProducts() async {
+  //   String product_name = _nameController.text;
+  //   String product_amount = _amountController.text;
+  //   double product_price = double.tryParse(_priceController.text) ?? 0;
+
+  //   try {
+  //     List<ProductData> products = await DatabaseHelper.getProducts(
+  //         product_name, product_amount, product_price);
+  //     print("fetched products");
+  //     print(products);
+  //     setState(() {
+  //       productRows = products.map((product) {
+  //         return DataRow(cells: [
+  //           DataCell(Text(product.product_name)),
+  //           DataCell(Text(product.product_amount)),
+  //           DataCell(Text(product.product_price.toString())),
+  //         ]);
+  //       }).toList();
+  //     });
+  //   } catch (e) {
+  //     print(product_name);
+  //     print(product_amount);
+  //     print(product_price);
+  //     print('Error fetching products from database: $e');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

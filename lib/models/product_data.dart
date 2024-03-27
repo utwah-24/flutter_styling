@@ -3,7 +3,7 @@
 class ProductData {
   final String product_name;
   final String product_amount;
-  final int product_price;
+  final double product_price;
 
   ProductData(
       {required this.product_name,
