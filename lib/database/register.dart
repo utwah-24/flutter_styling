@@ -6,7 +6,7 @@ class SQLHelper {
   static Future<void> createTables(Database database) async {
     await database.execute("""
       CREATE TABLE IF NOT EXISTS register(
-        
+        Login_ID INTEGER PRIMARY KEY AUTOINCREMENT ,
         full_name VARCHAR(20) NOT NULL,
         email VARCHAR(20) NOT NULL,
         password VARCHAR(20) NOT NULL
@@ -45,7 +45,7 @@ class DatabaseHelper {
       "sale-mate.db",
       version: 1,
       onCreate: (Database db, int version) async {
-        print("Creating table...");
+        // print("Creating table...");
         await SQLHelper.createTables(db);
       },
     );
@@ -58,8 +58,7 @@ class DatabaseHelper {
         "SELECT * FROM register WHERE email = ? AND password = ?",
         [email, password],
       );
-      print("Login");
-      print(authenticateUser(email, password));
+  
       return result.isNotEmpty;
     } catch (e) {
       print("Error authenticating user: $e");

@@ -1,14 +1,12 @@
 // // ignore_for_file: prefer_const_constructors
 
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, unused_field, avoid_print
 
 import 'package:flutter/material.dart';
-import 'package:flutter_styling/custom_/custom_home.dart';
-import 'package:flutter_styling/main.dart';
 import 'package:flutter_styling/models/register_data.dart';
-import 'package:flutter_styling/widgets/HomePage.dart';
+
 import './Login.dart';
-import './HomePage.dart';
+
 import 'package:flutter_styling/database/register.dart';
 
 class Register extends StatelessWidget {
@@ -84,7 +82,8 @@ class _FormContent extends StatefulWidget {
 
 class __FormContentState extends State<_FormContent> {
   bool _isPasswordVisible = false;
-  bool _rememberMe = false;
+  final bool _rememberMe = false;
+
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -121,9 +120,6 @@ class __FormContentState extends State<_FormContent> {
           context,
           MaterialPageRoute(builder: (context) => Login()),
         );
-        print(full_name);
-        print(email);
-        print(password);
       } catch (e) {
         // Handle any errors that occur during registration
         // For example:

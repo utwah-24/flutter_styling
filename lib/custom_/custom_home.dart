@@ -2,7 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_styling/main.dart';
+
 import 'package:flutter_styling/widgets/HomePage.dart';
 import 'package:flutter_styling/widgets/Report.dart';
 import 'package:flutter_styling/widgets/products.dart';

@@ -7,11 +7,10 @@ class RegisterData {
   final String password;
 
   RegisterData(
-      { required this.full_name, required this.email, required this.password});
+      {required this.full_name, required this.email, required this.password});
 
-       Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap() {
     return {
-      
       'full_name': full_name,
       'email': email,
       'password': password,
@@ -20,11 +19,10 @@ class RegisterData {
 
   factory RegisterData.fromMap(Map<String, dynamic> map) {
     return RegisterData(
-   
+      
       full_name: map['full_name'],
       email: map['email'],
       password: map['password'],
     );
   }
 }
-

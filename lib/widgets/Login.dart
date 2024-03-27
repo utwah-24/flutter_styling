@@ -1,7 +1,8 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_styling/custom_/custom_home.dart';
-import 'package:flutter_styling/main.dart';
-import 'package:flutter_styling/widgets/HomePage.dart';
+
 import 'package:flutter_styling/widgets/Register.dart';
 import '../database/register.dart';
 
