@@ -2,47 +2,31 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+// import '../database/daily_sales.dart';
+// import '../models/sales_data.dart';
 
 class NewTransaction extends StatefulWidget {
-  final Function addTx;
+  final Function() submitData;
+  final Function() openDatePicker;
+  final TextEditingController titleController;
+  final TextEditingController amountController;
+  final DateTime selectedDate;
 
-  NewTransaction(this.addTx);
+  NewTransaction({
+    required this.amountController,
+    required this.openDatePicker,
+    required this.submitData,
+    required this.titleController,
+    required this.selectedDate,
+  });
 
   @override
   State<NewTransaction> createState() => _NewTransactionState();
 }
 
 class _NewTransactionState extends State<NewTransaction> {
-  final _titleController = TextEditingController();
-  final _amountController = TextEditingController();
-  DateTime _selectedDate = DateTime.timestamp();
-
-  void _submitData() {
-    final eneterdTitle = _titleController.text;
-    final enteredAmount = double.parse(_amountController.text);
-    if (eneterdTitle.isEmpty || enteredAmount <= 0 || _selectedDate == null) {
-      return;
-    }
-
-    widget.addTx(eneterdTitle, enteredAmount, _selectedDate);
-
-    Navigator.of(context).pop();
-  }
-
-  void _presentDatepicker() {
-    showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime(2016),
-            lastDate: DateTime.now())
-        .then((pickedDate) {
-      if (pickedDate == null) {
-        return;
-      }
-      setState(() {
-        _selectedDate = pickedDate;
-      });
-    });
+  void _handleSubmitted(String value) {
+    widget.submitData(); // Call submitData function
   }
 
   @override
@@ -61,17 +45,19 @@ class _NewTransactionState extends State<NewTransaction> {
                 children: <Widget>[
                   TextField(
                     decoration: InputDecoration(labelText: 'Title'),
-                    controller: _titleController,
-                    onSubmitted: (_) => _submitData,
+                    controller: widget.titleController,
+                    onSubmitted: _handleSubmitted,
+
                     // onChanged: (val) {
                     //   titleInput = val;
                     // },
                   ),
                   TextField(
                     decoration: InputDecoration(labelText: 'Amount'),
-                    controller: _amountController,
+                    controller: widget.amountController,
                     keyboardType: TextInputType.number,
-                    onSubmitted: (_) => _submitData,
+                    onSubmitted: _handleSubmitted,
+
                     // onChanged: (val) {
                     //   amountInput = val;
                     // },
@@ -82,12 +68,12 @@ class _NewTransactionState extends State<NewTransaction> {
                       children: [
                         // ignore: unnecessary_null_comparison
                         Expanded(
-                          child: Text(_selectedDate == null
+                          child: Text(widget.selectedDate == null
                               ? 'No Date Chosen'
-                              : 'Picked Date:${DateFormat.yMd().format(_selectedDate)}'),
+                              : 'Picked Date:${DateFormat.yMd().format(widget.selectedDate)}'),
                         ),
                         TextButton(
-                          onPressed: _presentDatepicker,
+                          onPressed: widget.openDatePicker,
                           style: TextButton.styleFrom(
                             foregroundColor: Theme.of(context).primaryColor,
                           ),
@@ -103,7 +89,9 @@ class _NewTransactionState extends State<NewTransaction> {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).primaryColor,
                         foregroundColor: Colors.white),
-                    onPressed: _submitData,
+                    onPressed: () {
+                      widget.submitData();
+                    },
                     child: Text('Add transaction'),
                   )
                 ])),

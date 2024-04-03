@@ -67,7 +67,7 @@ class _ProductsState extends State<Products> {
 //     ));
 
 //     print("inserting data...");
-//     _fetchProducts(); 
+//     _fetchProducts();
 //     List<ProductData> fetchedProducts = await DatabaseHelper.getProducts(
 //       product_name, product_amount, product_price);
 
@@ -94,7 +94,6 @@ class _ProductsState extends State<Products> {
 //     print('Error inserting data into database: $e');
 //   }
 // }
-
 
   // Future<void> con_pro_data() async {
   //   String product_name = _nameController.text;

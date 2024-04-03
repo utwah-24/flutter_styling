@@ -1,9 +1,10 @@
+import 'package:flutter_styling/database/databasecreate.dart';
 import 'package:flutter_styling/models/product_data.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:sqflite/sqlite_api.dart';
 
-class SQLHelper {
-  static Future<void> createTables(Database database) async {
+class SQLHelper_products {
+  static Future<void> createProductsTables(Database database) async {
     await database.execute("""
       CREATE TABLE IF NOT EXISTS products(
         Product_ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,20 +26,20 @@ class SQLHelper {
 }
 
 class DatabaseHelper {
-  static Future<sql.Database> db() async {
-    return sql.openDatabase(
-      "sale_mate.db",
-      version: 1,
-      onCreate: (Database db, int version) async {
-        print("Creating table...");
-        await SQLHelper.createTables(db);
-      },
-    );
-  }
+  // static Future<sql.Database> db() async {
+  //   return sql.openDatabase(
+  //     "sale_mate.db",
+  //     version: 1,
+  //     onCreate: (Database db, int version) async {
+  //       print("Creating table...");
+  //       await SQLHelper_products.createProductsTables(db);
+  //     },
+  //   );
+  // }
 
   static Future<void> insertProducts(ProductData productdata) async {
-    final db = await DatabaseHelper.db();
-    await SQLHelper.insertProData(db, productdata.product_name,
+    final db = await DatabaseHelperCreate.db();
+    await SQLHelper_products.insertProData(db, productdata.product_name,
         productdata.product_amount, productdata.product_price as double);
   }
 
@@ -60,7 +61,7 @@ class DatabaseHelper {
   //   });
   // }
   static Future<List<ProductData>> getProducts() async {
-  final db = await DatabaseHelper.db();
+  final db = await DatabaseHelperCreate.db();
   final List<Map<String, dynamic>> maps = await db.query('products');
   print("the list");
   print(maps);

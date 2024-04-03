@@ -1,9 +1,10 @@
 import "package:sqflite/sqflite.dart" as sql;
 import "package:sqflite/sqlite_api.dart";
 import "package:flutter_styling/models/register_data.dart";
+import 'databasecreate.dart';
 
-class SQLHelper {
-  static Future<void> createTables(Database database) async {
+class SQLHelper_register {
+  static Future<void> createRegisterTables(Database database) async {
     await database.execute("""
       CREATE TABLE IF NOT EXISTS register(
         Login_ID INTEGER PRIMARY KEY AUTOINCREMENT ,
@@ -40,20 +41,20 @@ class SQLHelper {
 }
 
 class DatabaseHelper {
-  static Future<sql.Database> db() async {
-    return sql.openDatabase(
-      "sale-mate.db",
-      version: 1,
-      onCreate: (Database db, int version) async {
-        // print("Creating table...");
-        await SQLHelper.createTables(db);
-      },
-    );
-  }
+  // static Future<sql.Database> db() async {
+  //   return sql.openDatabase(
+  //     "sale-mate.db",
+  //     version: 1,
+  //     onCreate: (Database db, int version) async {
+  //       // print("Creating table...");
+  //       await SQLHelper3.createRegisterTables(db);
+  //     },
+  //   );
+  // }
 
   static Future<bool> authenticateUser(String email, String password) async {
     try {
-      final db = await DatabaseHelper.db();
+      final db = await DatabaseHelperCreate.db();
       List<Map<String, dynamic>> result = await db.rawQuery(
         "SELECT * FROM register WHERE email = ? AND password = ?",
         [email, password],
@@ -67,8 +68,8 @@ class DatabaseHelper {
   }
 
   static Future<void> insertRegister(RegisterData register) async {
-    final db = await DatabaseHelper.db();
-    await SQLHelper.insertData(
+    final db = await DatabaseHelperCreate.db();
+    await SQLHelper_register.insertData(
         db, register.full_name, register.email, register.password);
   }
 
