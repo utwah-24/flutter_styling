@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/product_data.dart';
-import '../database/productsdata.dart';
+import '../database/products_data.dart';
 
 class Products extends StatefulWidget {
   @override
@@ -197,6 +197,7 @@ class _ProductsState extends State<Products> {
             ),
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: const Text("Products"),
           actions: <Widget>[
             Padding(

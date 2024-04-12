@@ -1,13 +1,29 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
+// import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_styling/custom_/custom_home.dart';
-
+import 'package:flutter_styling/models/register_data.dart';
+import 'package:flutter_styling/utilities/local_data_utils.dart';
 import 'package:flutter_styling/widgets/Register.dart';
+// import 'package:image_picker/image_picker.dart';
 import '../database/register.dart';
 
-class Login extends StatelessWidget {
-  const Login({Key? key}) : super(key: key);
+class Login extends StatefulWidget {
+ 
+
+  const Login({Key? key, }) : super(key: key);
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+ 
+  
+  
+  
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +34,7 @@ class Login extends StatelessWidget {
         child: isSmallScreen
             ? Column(
                 mainAxisSize: MainAxisSize.min,
-                children: const [
+                children: [
                   _Logo(),
                   _FormContent(),
                 ],
@@ -27,10 +43,12 @@ class Login extends StatelessWidget {
                 padding: const EdgeInsets.all(32.0),
                 constraints: const BoxConstraints(maxWidth: 800),
                 child: Row(
-                  children: const [
+                  children: [
                     Expanded(child: _Logo()),
                     Expanded(
-                      child: Center(child: _FormContent()),
+                      child: Center(
+                        child: _FormContent(),
+                      ),
                     ),
                   ],
                 ),
@@ -41,7 +59,9 @@ class Login extends StatelessWidget {
 }
 
 class _Logo extends StatelessWidget {
-  const _Logo({Key? key}) : super(key: key);
+  const _Logo({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +97,12 @@ class _Logo extends StatelessWidget {
 }
 
 class _FormContent extends StatefulWidget {
-  const _FormContent({Key? key}) : super(key: key);
+  const _FormContent({
+  
+    Key? key,
+  }) : super(key: key);
+  
+  
 
   @override
   State<_FormContent> createState() => __FormContentState();
@@ -100,6 +125,16 @@ class __FormContentState extends State<_FormContent> {
 
       if (isAuthenticated) {
         // User authenticated successfully, navigate to home page
+        if (_rememberMe) {
+          RegisterData registerData = RegisterData(
+            full_name: "",
+            email: _emailController.text,
+            password: _passwordController.text,
+            rememberMe: true,
+          );
+          await LocalDataUtils().saveUserData(registerData);
+        }
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => CustomHome()),
@@ -119,8 +154,25 @@ class __FormContentState extends State<_FormContent> {
     }
   }
 
+  Future<void> getLocalUserData() async {
+    RegisterData registerData = await LocalDataUtils().getUserData();
+
+    _emailController.text = registerData.email ?? "";
+    _passwordController.text = registerData.password ?? "";
+    _rememberMe = registerData.rememberMe ?? false;
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getLocalUserData();
+  }
+
   @override
   Widget build(BuildContext context) {
+   
     return Container(
       constraints: const BoxConstraints(maxWidth: 300),
       child: Form(
@@ -129,6 +181,12 @@ class __FormContentState extends State<_FormContent> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Stack(
+              children: [
+           
+              ],
+            ),
+            _gap(),
             TextFormField(
               controller: _emailController,
               validator: (value) {

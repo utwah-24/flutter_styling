@@ -1,17 +1,19 @@
 // ignore_for_file: non_constant_identifier_names
 
 class SalesData {
-  final int? productID;
+  final int productID;
   final String title;
   final double price;
   final String chosen_date;
 
   SalesData({
-     this.productID,
+     required this.productID,
     required this.title,
     required this.price,
-    required this.chosen_date,
+    required this.chosen_date, 
   });
+
+  get id => null;
 
   Map<String, dynamic> toMap() {
     return {
@@ -27,7 +29,7 @@ class SalesData {
       productID: map['Product_ID'] ?? 0,
       title: map['Title'] ?? "",
       price: map['Price'] ?? 0.0,
-      chosen_date: map['Chosen_Date'] ?? "",
+      chosen_date: map['Chosen_Date'] ?? "", 
     );
   }
 }

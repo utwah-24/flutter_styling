@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:sqflite/sqlite_api.dart';
 import 'daily_sales.dart';
-import 'productsdata.dart';
+import 'products_data.dart';
 import 'register.dart';
 
 class DatabaseHelperCreate {

@@ -3,7 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styling/widgets/Login.dart';
-
+import 'about_page.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -22,6 +22,7 @@ class _SettingsPage2State extends State<Settings> {
           : ThemeData(primarySwatch: Colors.purple, appBarTheme: AppBarTheme()),
       child: Scaffold(
         appBar: AppBar(
+             automaticallyImplyLeading: false,
           title: const Text("Settings"),
           titleTextStyle: TextStyle(
             fontFamily: 'OpenSans',
@@ -47,14 +48,21 @@ class _SettingsPage2State extends State<Settings> {
                             })),
                   ],
                 ),
+                // TextButton(
+                //   onPressed: () {},
+                //   child: _CustomListTile(
+                //       title: "Help & Feedback",
+                //       icon: Icons.help_outline_rounded),
+                // ),
                 TextButton(
-                  onPressed: () {},
-                  child: _CustomListTile(
-                      title: "Help & Feedback",
-                      icon: Icons.help_outline_rounded),
-                ),
-                TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              About()), // Replace SecondPage with the name of your destination page
+                    );
+                  },
                   child: _CustomListTile(
                       title: "About", icon: Icons.info_outline_rounded),
                 ),
@@ -92,7 +100,14 @@ class _CustomListTile extends StatelessWidget {
       title: Text(title),
       leading: Icon(icon),
       trailing: trailing,
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  About()), // Replace SecondPage with the name of your destination page
+        );
+      },
     );
   }
 }

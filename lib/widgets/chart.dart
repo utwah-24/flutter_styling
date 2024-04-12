@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/sales_data.dart';
 import './chart_bar.dart';
-import '../models/transaction.dart';
+// import '../models/transaction.dart';
 
 class Chart extends StatelessWidget {
   final List<SalesData> recentTransactions;
@@ -16,7 +16,7 @@ class Chart extends StatelessWidget {
     var totalSum = 0.0;
     for (var i = 0; i < recentTransactions.length; i++) {
       DateTime transactionDate =
-          DateTime.parse(recentTransactions[i].chosen_date);
+          DateTime.parse(recentTransactions[i].chosen_date.toString());
       if (transactionDate.day == weekDay.day &&
           transactionDate.month == weekDay.month &&
           transactionDate.year == weekDay.year) {

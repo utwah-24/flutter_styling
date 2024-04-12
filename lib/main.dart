@@ -2,8 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_styling/database/daily_sales.dart';
-import 'package:flutter_styling/database/databasecreate.dart';
-import 'package:flutter_styling/widgets/HomePage.dart';
+import 'package:flutter_styling/database/database_create.dart';
+import 'package:flutter_styling/widgets/home_page.dart';
+
 import 'custom_/custom_home.dart';
 
 import 'package:flutter_styling/widgets/Login.dart';
