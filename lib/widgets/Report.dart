@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_styling/models/sales_data.dart';
-import 'package:flutter_styling/widgets/custom_apbar.dart';
+import 'package:flutter_styling/widgets/custom_appbar.dart';
 import 'mon_selector.dart';
 import './weeks.dart';
 import 'package:intl/intl.dart';
@@ -45,7 +45,9 @@ class _Reportpage2State extends State<Report> {
               appBarTheme: const AppBarTheme(),
             ),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Report')),
+        appBar: MyAppBar(
+          title: 'Report',
+        ),
         // appBar: MyAppBar(
         //   title: 'Report',
         //   // userEmail: widget.userEmail,

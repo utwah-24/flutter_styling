@@ -11,7 +11,7 @@ import './transaction_list.dart';
 import 'chart.dart';
 import 'package:intl/intl.dart';
 
-import 'custom_apbar.dart';
+import 'custom_appbar.dart';
 
 class MyHomePage extends StatefulWidget {
   final String userEmail;
@@ -124,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       _amountController.clear();
       _getSalesData();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Failed to input data. Try again.'),
       ));
       print('Error inserting data into database: $e');
@@ -169,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     print(widget.userEmail);
 
     final txListWidget = SingleChildScrollView(
-      child: Container(
+      child: SizedBox(
         height: (MediaQuery.of(context).size.height -
                 appbar.preferredSize.height -
                 MediaQuery.of(context).padding.top) *
@@ -188,7 +188,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Show chart'),
+                  const Text('Show chart'),
                   Switch(
                     value: _showChart,
                     onChanged: (val) {
@@ -200,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                 ],
               ),
             if (!isLandscape)
-              Container(
+              SizedBox(
                 height: (MediaQuery.of(context).size.height -
                         appbar.preferredSize.height -
                         MediaQuery.of(context).padding.top) *
@@ -210,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             if (!isLandscape) txListWidget,
             if (isLandscape)
               _showChart
-                  ? Container(
+                  ? SizedBox(
                       height: (MediaQuery.of(context).size.height -
                               appbar.preferredSize.height -
                               MediaQuery.of(context).padding.top) *
@@ -223,7 +223,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () => _startAddNewTransaction(context),
       ),
     );

@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styling/widgets/Login.dart';
 import 'about_page.dart';
-import 'custom_apbar.dart';
+import 'custom_appbar.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);

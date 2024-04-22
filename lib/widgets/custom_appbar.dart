@@ -25,13 +25,13 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                 future: DatabaseHelper.getUserProfilePicture(userEmail ?? ""),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 10),
+                    return const Padding(
+                      padding: EdgeInsets.only(right: 10),
                       child: CircularProgressIndicator(),
                     );
                   } else if (snapshot.hasError) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 10),
+                    return const Padding(
+                      padding: EdgeInsets.only(right: 10),
                       child: Icon(Icons.error),
                     );
                   } else {
@@ -43,8 +43,8 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                               backgroundImage: MemoryImage(profilePicture),
                             ),
                           )
-                        : Padding(
-                            padding: const EdgeInsets.only(right: 10),
+                        : const Padding(
+                            padding: EdgeInsets.only(right: 10),
                             child: Icon(Icons.person),
                           );
                   }
@@ -56,5 +56,5 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
