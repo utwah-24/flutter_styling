@@ -18,8 +18,7 @@ class MonthSelector extends StatelessWidget {
         IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            onChanged(getPreviousMonth(
-                currentMonth)); // Call onChanged with the previous month
+            onChanged(getPreviousMonth(currentMonth));
           },
         ),
         Text(
@@ -29,8 +28,7 @@ class MonthSelector extends StatelessWidget {
         IconButton(
           icon: Icon(Icons.arrow_forward),
           onPressed: () {
-            onChanged(getNextMonth(
-                currentMonth)); // Call onChanged with the next month
+            onChanged(getNextMonth(currentMonth));
           },
         ),
       ],
@@ -53,8 +51,7 @@ class MonthSelector extends StatelessWidget {
       'Dec'
     ];
     int currentIndex = months.indexOf(currentMonth);
-    int nextIndex = (currentIndex + 1) %
-        months.length; // Calculate the next index with wrap-around for December
+    int nextIndex = (currentIndex + 1) % months.length;
     return months[nextIndex];
   }
 
@@ -74,9 +71,7 @@ class MonthSelector extends StatelessWidget {
       'Dec'
     ];
     int currentIndex = months.indexOf(currentMonth);
-    int previousIndex = (currentIndex - 1 + months.length) %
-        months
-            .length; // Calculate the previous index with wrap-around for January
+    int previousIndex = (currentIndex - 1 + months.length) % months.length;
     return months[previousIndex];
   }
 }

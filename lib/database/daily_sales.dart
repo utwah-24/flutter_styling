@@ -37,9 +37,12 @@ class SQLHelper_dailySales {
     return result == 1;
   }
 
-    static Future<void> updateSalesData(Database database, int productId,
+  static Future<void> updateSalesData(Database database, int productId,
       String title, double price, String chosen_date) async {
     await database.transaction((txn) async {
+      print(title);
+      print(price);
+      print(productId);
       print("updating....");
       await txn.rawUpdate('''
         UPDATE Sales 
@@ -52,15 +55,52 @@ class SQLHelper_dailySales {
 
 class DatabaseHelper {
 
-static Future<List<SalesData>> getWeeklySales() async {
+static Future<List<double>> getWeeklyTotalsFromDatabase() async {
+    try {
+      final List<SalesData> weeklySales = await DatabaseHelper.getWeeklySales();
+      List<double> weeklyTotals = [0, 0, 0, 0]; // Initialize with default values
+
+      if (weeklySales.isNotEmpty) {
+        DateTime now = DateTime.now();
+        // Calculate totals for each week separately
+        for (int i = 0; i < weeklyTotals.length; i++) {
+          double total = 0;
+          for (var transaction in weeklySales) {
+            DateTime transactionDate = DateTime.parse(transaction.chosen_date);
+            int weekNumber = _calculateWeekNumber(transactionDate, now);
+            if (weekNumber == i + 1) {
+              total += transaction.price;
+            }
+          }
+          weeklyTotals[i] = total;
+        }
+      } else {
+        print("No weekly sales data available.");
+      }
+
+      return weeklyTotals;
+    } catch (e) {
+      print("Error fetching weekly totals from database: $e");
+      throw e; // Throw the error to be caught by the caller
+    }
+  }
+
+  static int _calculateWeekNumber(DateTime transactionDate, DateTime currentDate) {
+    DateTime firstDayOfMonth = DateTime(currentDate.year, currentDate.month, 1);
+    int daysDifference = transactionDate.difference(firstDayOfMonth).inDays;
+    int weekNumber = ((daysDifference + firstDayOfMonth.weekday) / 7).ceil();
+    return weekNumber;
+  }
+
+  static Future<List<SalesData>> getWeeklySales() async {
     final db = await DatabaseHelperCreate.db();
 
     // Get the current date
     DateTime now = DateTime.now();
 
     // Calculate the start and end date of the current week
-    DateTime startDate = now.subtract(Duration(days: now.weekday - 1));
-    DateTime endDate = startDate.add(Duration(days: 6));
+    DateTime startDate = now.subtract(Duration(days: now.weekday));
+    DateTime endDate = startDate.add(const Duration(days: 6));
 
     // Query to select price within the days of the current week
     final List<Map<String, dynamic>> maps = await db.rawQuery('''
@@ -75,24 +115,42 @@ static Future<List<SalesData>> getWeeklySales() async {
     return List.generate(maps.length, (i) {
       return SalesData(
         price: maps[i]['Price'],
-        chosen_date: maps[i]['Chosen_Date'], productID: 0, title: '',
+        chosen_date: maps[i]['Chosen_Date'],
+        productID: 0,
+        title: '',
       );
     });
   }
 
+  static Future<List<SalesData>> getMonthlySales() async {
+    final db = await DatabaseHelperCreate.db();
 
+    // Get the current date
+    DateTime now = DateTime.now();
 
+    // Calculate the start and end date of the current month
+    DateTime startDate = DateTime(now.year, now.month, 1);
+    DateTime endDate = DateTime(now.year, now.month + 1, 0);
 
+    // Query to select sales within the days of the current month
+    final List<Map<String, dynamic>> maps = await db.rawQuery('''
+      SELECT Product_ID, Title, Price, Chosen_Date FROM Sales
+      WHERE Chosen_Date BETWEEN ? AND ?
+    ''', [startDate.toIso8601String(), endDate.toIso8601String()]);
 
+    // Print the selected list
+    print("Monthly Sales:");
+    print(maps);
 
-
-
-
-
-
-
-
-
+    return List.generate(maps.length, (i) {
+      return SalesData(
+        productID: maps[i]['Product_ID'],
+        title: maps[i]['Title'],
+        price: maps[i]['Price'],
+        chosen_date: maps[i]['Chosen_Date'],
+      );
+    });
+  }
 
   static Future<void> insertSales(SalesData salesdata) async {
     final db = await DatabaseHelperCreate.db();
@@ -104,7 +162,7 @@ static Future<List<SalesData>> getWeeklySales() async {
   static Future<List<SalesData>> getSales() async {
     final db = await DatabaseHelperCreate.db();
     final List<Map<String, dynamic>> maps = await db.query('Sales');
-    print("the list");
+    print("the list i am get sales function");
     print(maps);
 
     return List.generate(maps.length, (i) {
@@ -117,8 +175,6 @@ static Future<List<SalesData>> getWeeklySales() async {
       // );
     });
   }
-
-
 
   static Future<bool> deleteSales(int productID) async {
     final db = await DatabaseHelperCreate.db();

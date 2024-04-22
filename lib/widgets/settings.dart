@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styling/widgets/Login.dart';
 import 'about_page.dart';
+import 'custom_apbar.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -21,12 +22,9 @@ class _SettingsPage2State extends State<Settings> {
           ? ThemeData.dark()
           : ThemeData(primarySwatch: Colors.purple, appBarTheme: AppBarTheme()),
       child: Scaffold(
-        appBar: AppBar(
-             automaticallyImplyLeading: false,
-          title: const Text("Settings"),
-          titleTextStyle: TextStyle(
-            fontFamily: 'OpenSans',
-          ),
+        appBar: MyAppBar(
+          title: 'Settings',
+          userEmail: '',
         ),
         body: Center(
           child: Container(

@@ -1,5 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:intl/intl.dart';
+
 class SalesData {
   final int productID;
   final String title;
@@ -7,20 +9,27 @@ class SalesData {
   final String chosen_date;
 
   SalesData({
-     required this.productID,
+    required this.productID,
     required this.title,
     required this.price,
-    required this.chosen_date, 
+    required this.chosen_date,
   });
 
-  get id => null;
+  get id => productID;
+
+  get weekNumber => null;
+
+  get salesAmount => price;
 
   Map<String, dynamic> toMap() {
+    String dateString =
+        DateFormat('yyyy-MM-dd').format(chosen_date as DateTime);
+
     return {
       'Product_ID': productID,
       'Title': title,
       'Price': price,
-      'Chosen_Date': chosen_date,
+      'Chosen_Date': dateString,
     };
   }
 
@@ -29,7 +38,7 @@ class SalesData {
       productID: map['Product_ID'] ?? 0,
       title: map['Title'] ?? "",
       price: map['Price'] ?? 0.0,
-      chosen_date: map['Chosen_Date'] ?? "", 
+      chosen_date: map['Chosen_Date'] ?? "",
     );
   }
 }

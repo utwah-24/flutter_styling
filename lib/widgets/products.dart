@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/product_data.dart';
 import '../database/products_data.dart';
+import 'custom_apbar.dart';
 
 class Products extends StatefulWidget {
   @override
@@ -50,95 +51,6 @@ class _ProductsState extends State<Products> {
       print('Error inserting data into database: $e');
     }
   }
-
-//   Future<void> con_pro_data() async {
-//   String product_name = _nameController.text;
-//   String product_amount = _amountController.text;
-//   double product_price = double.tryParse(_priceController.text) ?? 0;
-//   if (product_name.isEmpty && product_amount.isEmpty && product_price == 0) {
-//     return; // No data to insert, return from the function
-//   } // Parsing price to int
-
-//   try {
-//     await DatabaseHelper.insertProducts(ProductData(
-//       product_name: product_name, // Updated field names
-//       product_amount: product_amount, // Updated field names
-//       product_price: product_price,
-//     ));
-
-//     print("inserting data...");
-//     _fetchProducts();
-//     List<ProductData> fetchedProducts = await DatabaseHelper.getProducts(
-//       product_name, product_amount, product_price);
-
-//     setState(() {
-//       productRows.clear(); // Clear existing rows
-//       productRows.addAll(
-//         fetchedProducts.map((product) {
-//           return DataRow(cells: [
-//             DataCell(Text(product.product_name)),
-//             DataCell(Text(product.product_amount)),
-//             DataCell(Text(product.product_price.toString())),
-//           ]);
-//         }),
-//       );
-//     });
-
-//     _nameController.clear();
-//     _amountController.clear();
-//     _priceController.clear();
-//   } catch (e) {
-//     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-//       content: Text('Failed to input data. Try again.'),
-//     ));
-//     print('Error inserting data into database: $e');
-//   }
-// }
-
-  // Future<void> con_pro_data() async {
-  //   String product_name = _nameController.text;
-  //   String product_amount = _amountController.text;
-  //   double product_price = double.tryParse(_priceController.text) ?? 0;
-  //   if (product_name.isEmpty && product_amount.isEmpty && product_price == 0) {
-  //     return; // No data to insert, return from the function
-  //   } // Parsing price to int
-
-  //   try {
-  //     await DatabaseHelper.insertProducts(ProductData(
-  //       product_name: product_name, // Updated field names
-  //       product_amount: product_amount, // Updated field names
-  //       product_price: product_price,
-  //     ));
-
-  //     print("inserting data...");
-  //     List<ProductData> fetchedProducts = await DatabaseHelper.getProducts(
-  //     product_name, product_amount, product_price);
-  //     setState(() {
-  //       productRows.clear();
-  //        productRows.addAll(
-  //       DatabaseHelper.getProducts.map((product) {
-  //         return DataRow(cells: [
-  //           DataCell(Text(product.product_name)),
-  //           DataCell(Text(product.product_amount)),
-  //           DataCell(Text(product.product_price.toString())),
-  //         ]);
-  //       }),
-  //     );
-  //     });
-  //     setState(() {
-  //       _fetchProducts();
-  //     });
-
-  //     _nameController.clear();
-  //     _amountController.clear();
-  //     _priceController.clear();
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //       content: Text('Failed to input data. Try again.'),
-  //     ));
-  //     print('Error inserting data into database: $e');
-  //   }
-  // }
 
   Future<void> _fetchProducts() async {
     try {
@@ -196,16 +108,8 @@ class _ProductsState extends State<Products> {
               appBarTheme: AppBarTheme(),
             ),
       child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: const Text("Products"),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: Icon(Icons.person),
-            )
-          ],
-          titleTextStyle: TextStyle(fontFamily: 'OpenSans', fontSize: 20),
+        appBar: MyAppBar(
+          title: 'Products',
         ),
         body: Container(
           padding: EdgeInsets.only(left: 10.0, right: 5),

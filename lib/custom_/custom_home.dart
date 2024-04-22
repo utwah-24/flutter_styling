@@ -9,7 +9,8 @@ import 'package:flutter_styling/widgets/products.dart';
 import 'package:flutter_styling/widgets/settings.dart';
 
 class CustomHome extends StatefulWidget {
-  const CustomHome({super.key});
+  final String userEmail;
+  const CustomHome({super.key, required this.userEmail});
 
   @override
   State<CustomHome> createState() => _CustomHomeState();
@@ -18,13 +19,25 @@ class CustomHome extends StatefulWidget {
 class _CustomHomeState extends State<CustomHome> {
   final PageController _pageController = PageController();
   double selected = 0;
-
-  final List<Widget> pageViews = <Widget>[
-    MyHomePage(),
-    Products(),
-    Report(),
-    Settings()
-  ];
+  late List<Widget> pageViews;
+  @override
+  void initState() {
+    super.initState();
+    _pageController.addListener(() {
+      setState(() {
+        selected = _pageController.page ?? 0;
+      });
+    });
+    // Initialize pageViews after the widget has been fully initialized
+    pageViews = <Widget>[
+      MyHomePage(userEmail: widget.userEmail),
+      Products(),
+      Report(),
+      Settings()
+    ];
+    // Rest of the initState() method remains the same...
+  }
+  // ignore: recursive_getters
 
   Future<void> switchPage(int page) async {
     await _pageController.animateToPage(
@@ -35,16 +48,6 @@ class _CustomHomeState extends State<CustomHome> {
       curve: Curves.easeInOut,
     );
     setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController.addListener(() {
-      setState(() {
-        selected = _pageController.page ?? 0;
-      });
-    });
   }
 
   @override

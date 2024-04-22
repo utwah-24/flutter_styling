@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_styling/models/sales_data.dart';
+import 'package:flutter_styling/widgets/custom_apbar.dart';
 import 'mon_selector.dart';
 import './weeks.dart';
 import 'package:intl/intl.dart';
 
 class Report extends StatefulWidget {
-  Report({
-    Key? key,
-  }) : super(key: key);
+  const Report({
+    super.key,
+  });
 
   @override
   State<Report> createState() => _Reportpage2State();
@@ -17,16 +18,21 @@ class _Reportpage2State extends State<Report> {
   List<SalesData> salesData = [];
   bool _isDark = false;
   late String _currentMonth; // Current month
-  double week1Total = 0.0; // Initialize with default value
-  double week2Total = 0.0; // Initialize with default value
-  double week3Total = 0.0; // Initialize with default value
-  double week4Total = 0.0;
+  late double week1Total; // Initialize with default value
+  late double week2Total; // Initialize with default value
+  late double week3Total; // Initialize with default value
+  late double week4Total;
 
   @override
   void initState() {
     super.initState();
     // Initialize _currentMonth with the current month
     _currentMonth = DateFormat('MMM').format(DateTime.now());
+
+    week1Total = 0;
+    week2Total = 0;
+    week3Total = 0;
+    week4Total = 0;
   }
 
   @override
@@ -36,20 +42,14 @@ class _Reportpage2State extends State<Report> {
           ? ThemeData.dark()
           : ThemeData(
               primarySwatch: Colors.purple,
-              appBarTheme: AppBarTheme(),
+              appBarTheme: const AppBarTheme(),
             ),
       child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: const Text("Report"),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: Icon(Icons.person),
-            )
-          ],
-          titleTextStyle: TextStyle(fontFamily: 'OpenSans', fontSize: 20),
-        ),
+        appBar: AppBar(title: const Text('Report')),
+        // appBar: MyAppBar(
+        //   title: 'Report',
+        //   // userEmail: widget.userEmail,
+
         body: Column(
           children: [
             MonthSelector(
@@ -66,10 +66,9 @@ class _Reportpage2State extends State<Report> {
               width: 500,
               child: Weeks(
                 onWeekTotalsCalculated: updateWeekTotals,
-                transactionData: salesData,
               ),
             ),
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
             MonTotal(
               week1Total: week1Total,
               week2Total: week2Total,
@@ -82,11 +81,15 @@ class _Reportpage2State extends State<Report> {
     );
   }
 
+  @override
   void updateWeekTotals(List<double> totals) {
-    week1Total = totals[0];
-    week2Total = totals[1];
-    week3Total = totals[2];
-    week4Total = totals[3];
+    print('this is week3 total ${totals[2]}');
+    setState(() {
+      week1Total = totals[0];
+      week2Total = totals[1];
+      week3Total = totals[2];
+      week4Total = totals[3];
+    });
   }
 }
 
@@ -105,53 +108,33 @@ class MonTotal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Calculate monthly total by summing up the weekly totals
     final monthlyTotal = week1Total + week2Total + week3Total + week4Total;
+    print('this is month total$monthlyTotal');
 
     return Container(
-      width: 206,
-      height: 76.51,
-      child: Stack(
-        children: [
-          Positioned(
-            left: 0,
-            top: 0,
-            child: Text(
-              'Monthly Total: $monthlyTotal',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 32,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w400,
-                height: 0,
-              ),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text(
+            'Monthly Total',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          Positioned(
-            left: 32,
-            top: 47.61,
-            child: Container(
-              width: 144.05,
-              height: 28.91,
-              decoration: ShapeDecoration(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(side: BorderSide(width: 1)),
-                shadows: [
-                  BoxShadow(
-                    color: Color(0x3F000000),
-                    blurRadius: 4,
-                    offset: Offset(0, 4),
-                    spreadRadius: 0,
-                  )
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+          const SizedBox(height: 8),
+          Text(
+            '$monthlyTotal',
+            style: const TextStyle(fontSize: 24),
+          )
+        ]));
   }
 }
+
 
 // void main() {
 //   runApp(MaterialApp(

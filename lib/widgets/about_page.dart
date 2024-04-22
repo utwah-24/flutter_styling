@@ -39,7 +39,7 @@ class About extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            CustomHome()), // Replace SecondPage with the name of your destination page
+                            CustomHome(userEmail: '',)), // Replace SecondPage with the name of your destination page
                   );
                 },
                 child: const Row(

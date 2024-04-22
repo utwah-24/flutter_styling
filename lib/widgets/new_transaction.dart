@@ -1,37 +1,34 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, prefer_const_constructors_in_immutables, unnecessary_null_comparison, duplicate_ignore, use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../database/daily_sales.dart';
 import '../database/database_create.dart';
 import '../models/sales_data.dart';
-// import '../database/daily_sales.dart';
-// import '../models/sales_data.dart';
 
-// ignore: must_be_immutable
 class NewTransaction extends StatefulWidget {
-  final Function() submitData;
-  final Function(SalesData) onNewTransactionAdded;
+  final Function()? submitData;
+  final Function(SalesData)? onNewTransactionAdded;
   final Function() openDatePicker;
   final TextEditingController titleController;
   final TextEditingController amountController;
-  final List<SalesData> salesData;
+  final List<SalesData?> salesData;
   late DateTime selectedDate;
-  final Function updateWeekTotals;
-  final SalesData? existingTransaction; // Add this callback
+  late final Function(SalesData)? editData;
+  late SalesData? existingTransaction;
 
   NewTransaction({
     required this.amountController,
     required this.openDatePicker,
-    required this.submitData,
+    this.submitData,
     required this.titleController,
     required this.selectedDate,
-    required this.onNewTransactionAdded,
-    required this.updateWeekTotals,
+    this.onNewTransactionAdded,
     this.existingTransaction,
-    required this.salesData, // Initialize the callback
-  });
+    required this.salesData,
+    this.editData,
+  }) {
+    existingTransaction ??= null;
+  }
 
   @override
   State<NewTransaction> createState() => _NewTransactionState();
@@ -41,57 +38,27 @@ class _NewTransactionState extends State<NewTransaction> {
   @override
   void initState() {
     super.initState();
-    if (widget.existingTransaction != null) {
-      widget.titleController.text = widget.existingTransaction!.title;
-      widget.amountController.text =
-          widget.existingTransaction!.price.toString();
-      // You may need to format the date according to your requirements
-      widget.selectedDate =
-          DateTime.parse(widget.existingTransaction!.chosen_date);
-    }
   }
 
   void _handleSubmitted() async {
     if (widget.existingTransaction != null) {
-      String datestring = DateFormat('yyyy-MM-dd').format(widget.selectedDate);
-      // Perform update operation
-      SalesData updatedTransaction = SalesData(
-        productID: widget.existingTransaction!.productID,
-        title: widget.titleController.text,
-        price: double.parse(widget.amountController.text),
-        chosen_date: datestring,
-      );
-      final db = await DatabaseHelperCreate.db();
-      await SQLHelper_dailySales.updateSalesData(
-        db,
-        updatedTransaction.productID,
-        updatedTransaction.title,
-        updatedTransaction.price,
-        updatedTransaction.chosen_date,
-      );
-      Navigator.pop(context);
-
-      // Update local UI immediately
-      // setState(() {
-      //   // Update existing transaction in widget.salesData
-      //   int index = widget.salesData.indexWhere((element) =>
-      //       element.productID == widget.existingTransaction!.productID);
-      //   if (index != -1) { 
-      //     widget.salesData[index] = updatedTransaction;
-      //   }
-      // });
+      print('heyy.....');
+      widget.editData!(widget.existingTransaction!);
+      Navigator.of(context).pop();
     } else {
       // Perform insert operation
-      widget.submitData();
+      if (widget.submitData != null) {
+        widget.submitData!();
+      }
       SalesData newTransaction = SalesData(
         title: widget.titleController.text,
         price: double.parse(widget.amountController.text),
         chosen_date: widget.selectedDate.toString(),
         productID: widget.existingTransaction?.productID ?? 0,
       );
-      widget.onNewTransactionAdded(newTransaction);
-      // Update weekly totals after adding a new transaction
-      widget.updateWeekTotals();
+      if (widget.onNewTransactionAdded != null) {
+        widget.onNewTransactionAdded!(newTransaction);
+      }
     }
   }
 
@@ -148,7 +115,13 @@ class _NewTransactionState extends State<NewTransaction> {
                   backgroundColor: Theme.of(context).primaryColor,
                   foregroundColor: Colors.white,
                 ),
-                onPressed: _handleSubmitted,
+                onPressed: () {
+  if (widget.existingTransaction != null && widget.editData != null) {
+    widget.editData!(widget.existingTransaction!);
+    Navigator.of(context).pop();
+  }
+},
+
                 child: Text(widget.existingTransaction != null
                     ? 'Update'
                     : 'Add transaction'),

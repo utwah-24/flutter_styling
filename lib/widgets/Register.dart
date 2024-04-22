@@ -28,48 +28,46 @@ class _RegisterState extends State<Register> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   void selectImage() async {
-    print('to gallery...');
-    Uint8List img = await pickImage(ImageSource.gallery);
-    setState(() {
-      _image = img;
-    });
-  }
+  Uint8List img = await pickImage(ImageSource.gallery);
+  setState(() {
+    _image = img;
+  });
+}
 
-  Future<void> connectData() async {
-    String full_name = _fullNameController.text;
-    String email = _emailController.text;
-    String password = _passwordController.text;
+Future<void> connectData() async {
+  String full_name = _fullNameController.text;
+  String email = _emailController.text;
+  String password = _passwordController.text;
 
-    if (_passwordController.text != _reEnterPasswordController.text) {
+  if (_passwordController.text != _reEnterPasswordController.text) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Passwords do not match!'),
+      ),
+    );
+  } else {
+    try {
+      await DatabaseHelper.insertRegister(RegisterData(
+        full_name: full_name,
+        email: email,
+        password: password,
+        profilePicture: _image, // Pass the selected image here
+      ));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Login()),
+      );
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Passwords do not match!'),
+          content: Text('Registration failed. Please try again.'),
         ),
       );
-    } else {
-      try {
-        await DatabaseHelper.insertRegister(RegisterData(
-          full_name: full_name,
-          email: email,
-          password: password,
-        ));
-        print(full_name);
-         print(email);
-          print(password);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => Login()),
-        );
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Registration failed. Please try again.'),
-          ),
-        );
-        print('Error inserting data into database: $e');
-      }
+      print('Error inserting data into database: $e');
     }
   }
+}
+
 
   Widget _gap() => const SizedBox(height: 15);
 

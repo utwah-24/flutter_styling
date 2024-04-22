@@ -11,20 +11,15 @@ import 'package:flutter_styling/widgets/Register.dart';
 import '../database/register.dart';
 
 class Login extends StatefulWidget {
- 
-
-  const Login({Key? key, }) : super(key: key);
+  const Login({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
- 
-  
-  
-  
-
   @override
   Widget build(BuildContext context) {
     final bool isSmallScreen = MediaQuery.of(context).size.width < 600;
@@ -98,11 +93,8 @@ class _Logo extends StatelessWidget {
 
 class _FormContent extends StatefulWidget {
   const _FormContent({
-  
     Key? key,
   }) : super(key: key);
-  
-  
 
   @override
   State<_FormContent> createState() => __FormContentState();
@@ -137,7 +129,10 @@ class __FormContentState extends State<_FormContent> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => CustomHome()),
+          MaterialPageRoute(
+              builder: (context) => CustomHome(
+                    userEmail: email,
+                  )),
         );
       } else {
         // Authentication failed, show error message
@@ -172,7 +167,6 @@ class __FormContentState extends State<_FormContent> {
 
   @override
   Widget build(BuildContext context) {
-   
     return Container(
       constraints: const BoxConstraints(maxWidth: 300),
       child: Form(
@@ -182,9 +176,7 @@ class __FormContentState extends State<_FormContent> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Stack(
-              children: [
-           
-              ],
+              children: [],
             ),
             _gap(),
             TextFormField(
