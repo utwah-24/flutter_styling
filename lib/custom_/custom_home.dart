@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_styling/widgets/home_page.dart';
@@ -29,7 +28,7 @@ class _CustomHomeState extends State<CustomHome> {
       });
     });
     // Initialize pageViews after the widget has been fully initialized
-    pageViews = <Widget>[
+    pageViews = <Widget>[//just add your pages here 
       MyHomePage(userEmail: widget.userEmail),
       Products(),
       Report(),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_styling/models/sales_data.dart';
 import 'package:flutter_styling/widgets/custom_appbar.dart';
-import 'mon_selector.dart';
-import './weeks.dart';
+
+import '../database/daily_sales.dart';
 import 'package:intl/intl.dart';
 
 class Report extends StatefulWidget {
@@ -15,7 +15,9 @@ class Report extends StatefulWidget {
 }
 
 class _Reportpage2State extends State<Report> {
+  List<List<SalesData>> weeklyTransactions = List.filled(4, []);
   List<SalesData> salesData = [];
+  late List<double> weekTotals;
   bool _isDark = false;
   late String _currentMonth; // Current month
   late double week1Total; // Initialize with default value
@@ -28,11 +30,92 @@ class _Reportpage2State extends State<Report> {
     super.initState();
     // Initialize _currentMonth with the current month
     _currentMonth = DateFormat('MMM').format(DateTime.now());
-
+    weekTotals = List.filled(4, 0);
+    fetchWeeklyTransactions();
     week1Total = 0;
     week2Total = 0;
     week3Total = 0;
     week4Total = 0;
+  }
+
+  void fetchWeeklyTransactions() async {
+    try {
+      List<SalesData> allSales = await DatabaseHelper.getSales();
+      DateTime now = DateTime.now();
+      List<double> newWeekTotals = List.filled(4, 0); // Initialize with zeros
+      List<List<SalesData>> newWeeklyTransactions = List.filled(4, []);
+
+      for (int i = 0; i < weeklyTransactions.length; i++) {
+        List<SalesData> transactions = [];
+        print('i am filtering');
+        for (var transaction in allSales) {
+          DateTime transactionDate = DateTime.parse(transaction.chosen_date);
+          int weekNumber = _calculateWeekNumber(transactionDate, now);
+          String transactionMonth = DateFormat('MMM').format(transactionDate);
+          if (weekNumber == i + 1 && transactionMonth == _currentMonth) {
+            transactions.add(transaction);
+            newWeekTotals[i] += transaction.price;
+          }
+        }
+
+        newWeeklyTransactions[i] = transactions;
+      }
+
+      updateWeekTotals(newWeekTotals);
+      setState(() {
+        weeklyTransactions = newWeeklyTransactions;
+        weekTotals = newWeekTotals; // Update weekTotals with the new values
+      });
+    } catch (e) {
+      print("Error fetching weekly transactions: $e");
+    }
+  }
+
+  int _calculateWeekNumber(DateTime transactionDate, DateTime currentDate) {
+    DateTime firstDayOfMonth = DateTime(currentDate.year, currentDate.month, 1);
+    int daysDifference = transactionDate.difference(firstDayOfMonth).inDays;
+    int weekNumber = ((daysDifference + firstDayOfMonth.weekday) / 7).ceil();
+    return weekNumber;
+  }
+
+  String getNextMonth(String currentMonth) {
+    List<String> months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    int currentIndex = months.indexOf(currentMonth);
+    int nextIndex = (currentIndex + 1) % months.length;
+    return months[nextIndex];
+  }
+
+  String getPreviousMonth(String currentMonth) {
+    List<String> months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    int currentIndex = months.indexOf(currentMonth);
+    int previousIndex = (currentIndex - 1 + months.length) % months.length;
+    return months[previousIndex];
   }
 
   @override
@@ -54,20 +137,74 @@ class _Reportpage2State extends State<Report> {
 
         body: Column(
           children: [
-            MonthSelector(
-              currentMonth: _currentMonth,
-              onChanged: (newMonth) {
-                setState(() {
-                  _currentMonth = newMonth;
-                });
-              },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    fetchWeeklyTransactions();
+                    String previousMonth = getPreviousMonth(_currentMonth);
+
+                    setState(() {
+                      _currentMonth = previousMonth;
+                    });
+                  },
+                ),
+                Text(
+                  _currentMonth,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.arrow_forward),
+                  onPressed: () {
+                    fetchWeeklyTransactions();
+                    String nextMonth = getNextMonth(_currentMonth);
+
+                    setState(() {
+                      _currentMonth = nextMonth;
+                    });
+                  },
+                ),
+              ],
             ),
             const SizedBox(height: 20),
             Container(
               height: 290,
               width: 500,
-              child: Weeks(
-                onWeekTotalsCalculated: updateWeekTotals,
+              child: Container(
+                height: 500,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        for (int i = 0; i < weeklyTransactions.length; i++)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: Text('Week ${i + 1}'),
+                              ),
+                              SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text('Price:'),
+                                  SizedBox(width: 10),
+                                  Text("${weekTotals[i]}"),
+                                ],
+                              ),
+                              SizedBox(height: 3),
+                              Divider(color: Colors.grey),
+                            ],
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 50),
@@ -83,7 +220,6 @@ class _Reportpage2State extends State<Report> {
     );
   }
 
-  @override
   void updateWeekTotals(List<double> totals) {
     print('this is week3 total ${totals[2]}');
     setState(() {
@@ -136,10 +272,3 @@ class MonTotal extends StatelessWidget {
         ]));
   }
 }
-
-
-// void main() {
-//   runApp(MaterialApp(
-//     home: Report(),
-//   ));
-// }
