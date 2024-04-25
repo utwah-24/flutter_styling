@@ -1,6 +1,6 @@
 import 'package:flutter_styling/database/database_create.dart';
 import 'package:flutter_styling/models/product_data.dart';
-import 'package:sqflite/sqflite.dart' as sql;
+
 import 'package:sqflite/sqlite_api.dart';
 
 class SQLHelper_products {

@@ -1,6 +1,8 @@
-import 'dart:io';
+
+// ignore_for_file: camel_case_types
+
 import 'package:flutter/foundation.dart';
-import 'package:sqflite/sqflite.dart' as sql;
+
 import 'package:sqflite/sqlite_api.dart';
 import 'package:flutter_styling/models/register_data.dart';
 import 'database_create.dart';
