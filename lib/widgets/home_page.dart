@@ -5,8 +5,8 @@ import 'package:flutter_styling/database/daily_sales.dart';
 import 'package:flutter_styling/models/sales_data.dart';
 // import 'package:flutter_styling/models/transaction.dart';
 import 'package:flutter_styling/widgets/new_transaction.dart';
-import 'package:flutter_styling/widgets/weeks.dart';
-import '../database/database_create.dart';
+
+
 import './transaction_list.dart';
 import 'chart.dart';
 import 'package:intl/intl.dart';
