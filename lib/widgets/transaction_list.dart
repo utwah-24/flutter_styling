@@ -1,9 +1,9 @@
-// ignore_for_file: avoid_print, must_be_immutable
+// ignore_for_file: avoid_print, must_be_immutable, unused_field
 
 import 'package:flutter/material.dart';
 import 'package:flutter_styling/database/daily_sales.dart';
 import 'package:flutter_styling/models/sales_data.dart';
-import 'package:flutter_styling/widgets/new_transaction.dart';
+
 import 'package:intl/intl.dart';
 
 import '../database/database_create.dart';
@@ -64,7 +64,7 @@ class _TransactionsListState extends State<TransactionsList> {
     ).then((confirmDelete) async {
       // Proceed with deletion if the user confirmed
       if (confirmDelete) {
-        if (await DatabaseHelper.deleteSales(salesData.productID ?? 0)) {
+        if (await DatabaseHelper.deleteSales(salesData.productID )) {
           setState(() {
             widget.salesData.remove(salesData);
           });
@@ -106,7 +106,7 @@ class _TransactionsListState extends State<TransactionsList> {
     print('editing.......$data');
     if (widget.existingTransaction != null) {
       // Perform update operation
-      String dateString = DateFormat('yyyy-MM-dd').format(_selectedDate);
+      
 
       SalesData updatedTransaction = SalesData(
         productID: data!.productID,

@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unused_field
 
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -9,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import '../utilities/util.dart';
 
 class Register extends StatefulWidget {
-  Register({Key? key}) : super(key: key);
+  const Register({Key? key}) : super(key: key);
 
   @override
   State<Register> createState() => _RegisterState();

@@ -1,8 +1,9 @@
+// ignore_for_file: must_be_immutable, unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../database/daily_sales.dart';
-import '../database/database_create.dart';
+
 import '../models/sales_data.dart';
 
 class NewTransaction extends StatefulWidget {

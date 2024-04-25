@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_styling/custom_/custom_home.dart';
-import 'package:flutter_styling/widgets/settings.dart';
+
 
 class About extends StatelessWidget {
   @override

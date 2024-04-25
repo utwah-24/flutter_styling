@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
 // import 'dart:io';
-import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_styling/custom_/custom_home.dart';
 import 'package:flutter_styling/models/register_data.dart';
@@ -152,8 +152,8 @@ class __FormContentState extends State<_FormContent> {
   Future<void> getLocalUserData() async {
     RegisterData registerData = await LocalDataUtils().getUserData();
 
-    _emailController.text = registerData.email ?? "";
-    _passwordController.text = registerData.password ?? "";
+    _emailController.text = registerData.email;
+    _passwordController.text = registerData.password;
     _rememberMe = registerData.rememberMe ?? false;
 
     setState(() {});
