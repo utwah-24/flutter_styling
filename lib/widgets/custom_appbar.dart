@@ -17,7 +17,11 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
-      title: Text(title),
+      // backgroundColor: Colors.white,
+      elevation: 0,
+      title: Text(
+        title,
+      ),
       centerTitle: true,
       actions: <Widget>[
         userEmail != null

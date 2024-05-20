@@ -71,33 +71,6 @@ class _ProductsState extends State<Products> {
     }
   }
 
-  // Future<void> _fetchProducts() async {
-  //   String product_name = _nameController.text;
-  //   String product_amount = _amountController.text;
-  //   double product_price = double.tryParse(_priceController.text) ?? 0;
-
-  //   try {
-  //     List<ProductData> products = await DatabaseHelper.getProducts(
-  //         product_name, product_amount, product_price);
-  //     print("fetched products");
-  //     print(products);
-  //     setState(() {
-  //       productRows = products.map((product) {
-  //         return DataRow(cells: [
-  //           DataCell(Text(product.product_name)),
-  //           DataCell(Text(product.product_amount)),
-  //           DataCell(Text(product.product_price.toString())),
-  //         ]);
-  //       }).toList();
-  //     });
-  //   } catch (e) {
-  //     print(product_name);
-  //     print(product_amount);
-  //     print(product_price);
-  //     print('Error fetching products from database: $e');
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Theme(

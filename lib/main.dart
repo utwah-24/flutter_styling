@@ -4,14 +4,10 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_styling/database/database_create.dart';
 
-
 import 'package:flutter_styling/widgets/Login.dart';
 
 void main() {
   DatabaseHelperCreate.db();
-  // WidgetsFlutterBinding.ensureInitialized();
-  // SystemChrome.setPreferredOrientations(
-  //     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(MyApp());
 }
 
